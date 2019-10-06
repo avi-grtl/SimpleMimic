@@ -321,9 +321,9 @@
 			"Param0": 0.18,
 			"Param1": 0.18,
 			"Param2": 0.18,
-			"ColorR": 0.4706,
-			"ColorG": 0.549,
-			"ColorB": 0.6863,
+			"ColorR": 1.0,
+			"ColorG": 0.0,
+			"ColorB": 0.0,
 			"ColorA": 1
 		},
 		{
@@ -638,9 +638,9 @@
 			"Param0": 0.18,
 			"Param1": 0.18,
 			"Param2": 0.18,
-			"ColorR": 0.4706,
-			"ColorG": 0.549,
-			"ColorB": 0.6863,
+			"ColorR": 1.0,
+			"ColorG": 1.0,
+			"ColorB": 0.0,
 			"ColorA": 1
 		},
 		{
@@ -915,7 +915,7 @@
 			"ID": 1,
 			"Name": "right_clavicle",
 			"Shape": "capsule",
-			"ParentJoint": 9,
+			"ParentJoint": 1,
 			"AttachX": -0.011,
 			"AttachY": 0.24,
 			"AttachZ": 0.095,
@@ -1183,7 +1183,7 @@
 			"Shape": "sphere",
 			"ParentJoint": 2,
 			"AttachX": 0,
-			"AttachY": 0.1,
+			"AttachY": 0.3,
 			"AttachZ": 0,
 			"AttachThetaX": 0,
 			"AttachThetaY": 0,

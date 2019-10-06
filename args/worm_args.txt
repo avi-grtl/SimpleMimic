@@ -1,0 +1,4 @@
+--scene kin_char
+
+--character_file data/characters/worm.txt
+--motion_file data/motions/worm_hello.txt
