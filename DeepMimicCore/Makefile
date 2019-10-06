@@ -2,17 +2,20 @@ BIN=Main
 OBJ_DIR = objs
 MKDIR = mkdir -p
 
-EIGEN_DIR = ../../libraries/eigen
-BULLET_INC_DIR = ../../libraries/bullet3/src
+EIGEN_DIR = /usr/local/include/eigen3
+BULLET_INC_DIR = /usr/local/include/bullet
+BULLET_LIB_DIR = /usr/local/lib/
 
-PYTHON_INC = /usr/include/python3.6m
-PYTHON_LIB = /usr/lib/ -lpython3.6m
+PYTHON_INC = /home/linux/anaconda3/envs/deepmimic/include/python3.6m
+PYTHON_LIB = /home/linux/anaconda3/envs/deepmimic/lib/ -lpython3.6m
 
 INC = -I./ \
 	-I$(EIGEN_DIR) \
 	-I$(BULLET_INC_DIR)
 
-LIBS = -lGLEW -lGL -lGLU -lglut -lBulletDynamics -lBulletCollision -lLinearMath -lm -lstdc++
+LIBS = -L$(BULLET_LIB_DIR)
+
+LFAGS = -lGLEW -lGL -lGLU -lglut -lBulletDynamics -lBulletCollision -lLinearMath -lm -lstdc++
 
 CC = clang++
 CFLAGS = -std=c++11 -O3 -Wall -fPIC 
@@ -42,14 +45,14 @@ print:
 
 python: $(OUT_DIRS) $(OBJ)
 	swig -c++ -python DeepMimicCore.i
-	$(CC) -c -g $(CFLAGS) $(INC) $(LIBS) DeepMimicCore.cpp DeepMimicCore_wrap.cxx -I$(PYTHON_INC)
-	$(CC) -shared $(CFLAGS) $(OBJ) $(LIBS) DeepMimicCore_wrap.o -o _DeepMimicCore.so -L$(PYTHON_LIB)
+	$(CC) -c -g $(CFLAGS) $(INC) DeepMimicCore.cpp DeepMimicCore_wrap.cxx -I$(PYTHON_INC)
+	$(CC) -shared $(CFLAGS) $(OBJ) $(LIBS) $(LFAGS) DeepMimicCore_wrap.o -o _DeepMimicCore.so -L$(PYTHON_LIB)
 
 $(OBJ_DIR)/%.o: %.cpp
 	$(CC) -c -g $(CFLAGS) $(INC) -o $@ $<
 
 $(BIN): $(OUT_DIRS) $(OBJ)
-	$(CC) -g $(CFLAGS) $(OBJ) $(LIBS) -o $@
+	$(CC) -g $(CFLAGS) $(OBJ) $(LIBS) $(LFAGS) -o $@
 
 $(OUT_DIRS):
 	$(MKDIR) $(OUT_DIRS)
