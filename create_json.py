@@ -11,34 +11,32 @@ body_desc = {
 }
 
 # Recurses a hierarchy, starting from op
-def recurse_hierarchy(op, parentID, parentPos):
+def recurse_hierarchy(op, parentID):
     global depth
     global globalID
 
     # print "{} parent: {}".format(depth, parentID)
     myID = parentID
-    myPos = parentPos
 
     if isinstance(op, c4dchar.CAJointObject):
 
         globalID += 1
-        offset = op.GetMg().off
-        
         myID = globalID
-        myPos = offset
 
-        attach = myPos - parentPos
+        pos = op.GetMl().off
+        rot = c4dutils.MatrixToHPB(op.GetMl())
+
         body_desc["Skeleton"]["Joints"].append({
             "ID": myID,
             "Name": op.GetName(),
             "Type": "none",
             "Parent": parentID,
-            "AttachX": attach.x,
-            "AttachY": attach.y,
-            "AttachZ": attach.z,
-            "AttachThetaX": 0.000000,
-            "AttachThetaY": 0.000000,
-            "AttachThetaZ": 0.000000,
+            "AttachX": pos.x,
+            "AttachY": pos.y,
+            "AttachZ": pos.z,
+            "AttachThetaX": rot.x,
+            "AttachThetaY": rot.y,
+            "AttachThetaZ": rot.z,
             "LimLow0": 1.000000,
             "LimHigh0": 0.000000,
             "LimLow1": 1.000000,
@@ -50,60 +48,56 @@ def recurse_hierarchy(op, parentID, parentPos):
             "DiffWeight": 1
         })
         body_desc["Skeleton"]["BodyDefs"].append({
-			"ID": myID,
-			"Name": op.GetName(),
-			"Shape": "sphere",
-			"Mass": 6.0,
-			"ColGroup": 1,
-			"EnableFallContact": 1,
-			"AttachX": 0,
-			"AttachY": 0,
-			"AttachZ": 0,
-			"AttachThetaX": 0,
-			"AttachThetaY": 0,
-			"AttachThetaZ": 0,
-			"Param0": 10,
-			"Param1": 10,
-			"Param2": 10
+            "ID": myID,
+            "Name": op.GetName(),
+            "Shape": "sphere",
+            "Mass": 6.0,
+            "ColGroup": 1,
+            "EnableFallContact": 1,
+            "AttachX": 0,
+            "AttachY": 0,
+            "AttachZ": 0,
+            "AttachThetaX": 0,
+            "AttachThetaY": 0,
+            "AttachThetaZ": 0,
+            "Param0": 10,
+            "Param1": 10,
+            "Param2": 10
         })
         body_desc["Skeleton"]["DrawShapeDefs"].append({
-			"ID": myID,
-			"Name": op.GetName(),
-			"Shape": "sphere",
-			"ParentJoint": myID,
-			"AttachX": 0,
-			"AttachY": 0,
-			"AttachZ": 0,
-			"AttachThetaX": 0,
-			"AttachThetaY": 0,
-			"AttachThetaZ": 0,
-			"Param0": 10,
-			"Param1": 10,
-			"Param2": 10,
-			"ColorR": 0.4706,
-			"ColorG": 0.549,
-			"ColorB": 0.6863,
-			"ColorA": 1
+            "ID": myID,
+            "Name": op.GetName(),
+            "Shape": "sphere",
+            "ParentJoint": myID,
+            "AttachX": 0,
+            "AttachY": 0,
+            "AttachZ": 0,
+            "AttachThetaX": 0,
+            "AttachThetaY": 0,
+            "AttachThetaZ": 0,
+            "Param0": 10,
+            "Param1": 10,
+            "Param2": 10,
+            "ColorR": 0.4706,
+            "ColorG": 0.549,
+            "ColorB": 0.6863,
+            "ColorA": 1
         })
         # print "{} {} {} {}".format(depth, op.GetName(), myID, parentID)
     
     for child in op.GetChildren():
         depth += 1
-        recurse_hierarchy(child, myID, myPos)
+        recurse_hierarchy(child, myID)
         depth -= 1
 
 doc = c4ddoc.GetActiveDocument()
-
-
 if doc:
     # Iterate all objects in the document
     depth = 0
     globalID = -1
 
-    op = doc.GetFirstObject()
-    while op:
-        recurse_hierarchy(op, -1, c4d.Vector())
-        op = op.GetNext()
+    for op in doc.GetObjects():
+        recurse_hierarchy(op, globalID)
 
 
 with open("/Users/scott/Documents/deepmimic/DeepMimic/data/characters/agent.txt", "w") as f:
