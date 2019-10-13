@@ -1,0 +1,4 @@
+--scene kin_char
+
+--character_file c4d/agent.txt
+--motion_file c4d/agent_test.txt

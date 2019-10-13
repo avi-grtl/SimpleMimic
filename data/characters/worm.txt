@@ -43,7 +43,7 @@
 				"LimHigh2": 1.2,
 				"TorqueLim": 200,
 				"IsEndEffector": 0,
-				"DiffWeight": 0.5
+				"DiffWeight": 1
 			},
 			{
 				"ID": 2,
@@ -63,7 +63,7 @@
 				"LimLow2": -1.2,
 				"LimHigh2": 1.2,
 				"IsEndEffector": 1,
-				"DiffWeight": 0
+				"DiffWeight": 1
 			}
 		]
 	},
